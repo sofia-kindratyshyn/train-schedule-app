@@ -9,9 +9,6 @@ export const pool = new Pool({
   user: getEnvVar('DB_USER'),
   password: getEnvVar('DB_PASSWORD'),
   database: getEnvVar('DB_NAME'),
-  ssl: {
-    rejectUnauthorized: false,
-  },
 });
 
 export const postgresConnection = async () => {
