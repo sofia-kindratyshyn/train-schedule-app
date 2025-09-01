@@ -24,12 +24,11 @@ export const register = async (payload) => {
     'SELECT * FROM users WHERE email = $1',
     [payload.email],
   );
-
   if (userExistsQuery.rows.length > 0) {
     throw createHttpError(403, 'User already exists. Try to login');
   }
 
-  const hashedPassword = bcrypt.hashSync(payload.password_hash, 10);
+  const hashedPassword = bcrypt.hashSync(payload.password, 10);
 
   await pool.query(
     'INSERT INTO users (username, password_hash, email) VALUES ($1, $2, $3)',
@@ -179,4 +178,16 @@ export const updateUser = async (payload) => {
     email: updatedUserResult.email,
     username: updatedUserResult.username,
   };
+};
+
+export const getCurrentSession = async (token) => {
+  const session = await pool.query(
+    'SELECT * FROM sessions WHERE refresh_token = $1',
+    [token],
+  );
+  if (session.rows.length === 0) {
+    throw createHttpError(403, 'Invalid session');
+  }
+
+  return { refreshToken: session.rows[0].refresh_Token };
 };
