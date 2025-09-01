@@ -4,15 +4,17 @@ import { useSearchParams } from "next/navigation";
 import UpdateTrainForm from "../../../../../../components/UpdateTrainForm";
 import { Suspense } from "react";
 
-export default function TrainUpdatePage() {
+function TrainUpdateContent() {
   const searchParams = useSearchParams();
   const trainId = searchParams.get("trainId");
 
+  return <>{trainId && <UpdateTrainForm trainId={Number(trainId)} />}</>;
+}
+
+export default function TrainUpdatePage() {
   return (
-    <>
-      <Suspense fallback={<div>Loading...</div>}>
-        {trainId && <UpdateTrainForm trainId={Number(trainId)} />}
-      </Suspense>
-    </>
+    <Suspense fallback={<div>Loading train data...</div>}>
+      <TrainUpdateContent />
+    </Suspense>
   );
 }
