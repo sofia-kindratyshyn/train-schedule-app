@@ -27,17 +27,14 @@ type GetByIdTrainResponse = {
 }
 
 export const login = async (data: LoginData) => {
-    try {
-        const res = await nextServer.post('/auth/login', data, { withCredentials: true });
-        return res.data;
-    } catch (err: any) {console.error("Login error:", err.response?.data || err.message);
-  throw err; }
+    const res = await nextServer.post('/auth/login', data);
+    return res.data;
+    
 }
 
 export const register = async (data: RegisterData) => {
-  const res = await nextServer.post('/auth/register', data);
-  return res.data;
-
+    const res = await nextServer.post('/auth/register', data);
+    return res.data;
 }
 
 export const getTrains = async () => {
@@ -68,4 +65,9 @@ export const updateTrain = async (payload: Train, trainId: number) => {
 export const updateUser = async (username: string, email: string) => {
   const res = await nextServer.patch<{ message: string; status: string, data: User }>('/users', {username, email})
     return res.data.data;
+}
+
+export const logout = async () => { 
+    const res = await nextServer.post<{ message: string; status: string }>('/auth/logout');
+    return res.data;
 }

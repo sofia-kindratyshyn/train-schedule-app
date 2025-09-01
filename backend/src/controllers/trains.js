@@ -31,13 +31,13 @@ export const getByIdTrainController = async (req, res) => {
 
   if (!train) {
     return res.status(404).json({
-      message: `Train with id ${req.query.trainId} not found`,
+      message: `Train with id ${trainId} not found`,
       status: 404,
     });
   }
 
   return res.json({
-    message: `Successfuly got train with id ${req.query.trainId}`,
+    message: `Successfuly got train with id ${trainId}`,
     status: 200,
     data: train,
   });

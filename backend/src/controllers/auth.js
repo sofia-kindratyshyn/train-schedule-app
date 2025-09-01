@@ -1,4 +1,5 @@
 import {
+  getCurrentSession,
   getCurrentUser,
   login,
   refreshTokens,
@@ -7,12 +8,26 @@ import {
 } from '../service/auth.js';
 
 export const registerController = async (req, res) => {
-  const registeredUser = await register(req.body);
+  const session = await register(req.body);
 
-  res.json({
-    status: 201,
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    maxAge: 15 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+  res.cookie('accessToken', session.accessToken, {
+    httpOnly: true,
+    maxAge: 15 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+
+  res.status(201).json({
     message: 'User registered successfully',
-    data: registeredUser,
+    data: session,
   });
 };
 
@@ -45,6 +60,15 @@ export const loginController = async (req, res) => {
   });
 };
 
+export const logoutController = async (req, res) => {
+  res.clearCookie('refreshToken', { path: '/' });
+  res.clearCookie('accessToken', { path: '/' });
+  res.json({
+    status: 200,
+    message: 'User logged out successfully',
+  });
+};
+
 export const getCurrUserController = async (req, res) => {
   const user = await getCurrentUser(req.cookies['refreshToken']);
   res.json({
@@ -68,5 +92,14 @@ export const patchCurrUserController = async (req, res) => {
     status: 200,
     message: 'Successfully updated user',
     data: updatedUser,
+  });
+};
+
+export const getCurrSessionController = async (req, res) => {
+  const session = await getCurrentSession(req.cookies['refreshToken']);
+  res.json({
+    status: 200,
+    message: 'Successfully get session',
+    data: session,
   });
 };

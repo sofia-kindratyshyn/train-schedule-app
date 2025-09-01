@@ -16,10 +16,9 @@ export default function Page() {
   const { setIsAuthenticated, setUser } = useAuthStore();
   const router = useRouter();
 
-  const handleLogin = async (formData: FormData) => {
+  const handleRegistration = async (formData: FormData) => {
     try {
       const data = Object.fromEntries(formData) as RegisterData;
-      console.log(data);
       const validationErrors: { [key: string]: string } = {};
       if (!data.username || data.username.trim().length < 3) {
         validationErrors.username =
@@ -37,15 +36,14 @@ export default function Page() {
         return;
       }
       const user = await register(data);
-      console.log(user);
       setUser({
         username: user.data.username,
         email: user.data.email,
       });
       setIsAuthenticated(true);
       router.push("/profile");
-    } catch (error) {
-      console.log("Registration failed:", error);
+    } catch (error: any) {
+      return;
     }
   };
 
@@ -55,7 +53,7 @@ export default function Page() {
         className={css.form}
         onSubmit={(e) => {
           e.preventDefault();
-          handleLogin(new FormData(e.target as HTMLFormElement));
+          handleRegistration(new FormData(e.target as HTMLFormElement));
         }}
       >
         <h1 className={css.formTitle}>Sign up</h1>
@@ -95,6 +93,8 @@ export default function Page() {
           />
           {errors.password && <p className={css.error}>{errors.password}</p>}
         </div>
+
+        {errors.general && <p className={css.error}>{errors.general}</p>}
 
         <button type="submit" className={css.submitButton}>
           Register

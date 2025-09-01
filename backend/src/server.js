@@ -7,19 +7,18 @@ import { getEnvVar } from './utils/getEnvVar.js';
 import authRouter from './routes/auth.js';
 import { notFoundErr } from './middleware/notFoundError.js';
 import { errorHandler } from './middleware/errorHandler.js';
-import { corsOptions } from './middleware/allowCors.js';
 import cookieParser from 'cookie-parser';
+import { corsOptions } from './middleware/allowCors.js';
 //import { authenticate } from './middleware/authenticate.js';
 
 const PORT = Number(getEnvVar('PORT'));
 
 export const setupServer = () => {
   const app = express();
-
+  //app.use(authenticate);
   app.use(cookieParser());
 
   app.use(express.json());
-  //app.use(authenticate());
   app.use(cors(corsOptions));
 
   app.use(trainsRouter);
