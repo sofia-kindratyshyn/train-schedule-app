@@ -1,6 +1,7 @@
 import { Train } from "../../types/train";
 import { nextServer } from "./api";
 import { User } from "../../types/user";
+import axios from "axios";
 
 export type LoginData = {
     email: string;
