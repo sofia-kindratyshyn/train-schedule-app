@@ -24,6 +24,6 @@
 //  return NextResponse.next();
 //}
 
-export const config = {
-  matcher: ['/profile/:path*', '/notes/:path*', '/trains/:path*', '/sign-in', '/sign-up'],
-};
+//export const config = {
+ // matcher: ['/profile/:path*', '/trains/:path*', '/sign-in', '/sign-up'],
+//};
