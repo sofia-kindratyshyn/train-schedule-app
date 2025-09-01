@@ -42,7 +42,7 @@ export default function Page() {
       });
       setIsAuthenticated(true);
       router.push("/profile");
-    } catch (error: any) {
+    } catch {
       return;
     }
   };
