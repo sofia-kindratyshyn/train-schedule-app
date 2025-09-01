@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
-import { login } from "../../lib/api/clientApi";
+import { login } from "../../../../lib/api/clientApi";
 import css from "./SignIn.client.module.css";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "../../lib/store/authenticationStore";
+import { useAuthStore } from "../../../../lib/store/authenticationStore";
 
 type LoginData = {
   email: string;
@@ -11,19 +11,20 @@ type LoginData = {
 };
 
 export default function Login() {
-  const { setAuthenticationState } = useAuthStore();
+  const { setIsAuthenticated, setUser } = useAuthStore();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const handleLogin = async (formData: FormData) => {
     try {
       setError(null);
       const data = Object.fromEntries(formData.entries()) as LoginData;
-      setAuthenticationState();
-      await login(data);
-
+      const user = await login(data);
+      setUser({ username: user.data.username, email: user.data.email });
+      setIsAuthenticated(true);
       router.push("/profile");
-    } catch {
+    } catch (error) {
       setError("Invalid email or password");
+      console.log(error);
     }
   };
 
@@ -40,6 +41,7 @@ export default function Login() {
               type="email"
               name="email"
               className={css.input}
+              autoComplete="email"
               required
             />
           </div>

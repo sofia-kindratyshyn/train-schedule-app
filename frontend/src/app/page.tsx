@@ -14,6 +14,8 @@ export default function Home() {
           trains. With support for keyword search and structured organization,
           Trains Schedule App offers a streamlined experience for anyone who
           values clarity and productivity.
+          <br />
+          AUTHORIZE TO EXPLORE MORE!
         </p>
       </div>
     </main>

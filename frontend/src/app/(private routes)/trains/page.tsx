@@ -1,5 +1,5 @@
-import TrainsList from "../../components/TrainsList";
-import { getTrains } from "../../lib/api/clientApi";
+import TrainsList from "../../../../components/TrainsList";
+import { getTrains } from "../../../../lib/api/clientApi";
 
 export default async function TrainsPage() {
   const trainsList = await getTrains();

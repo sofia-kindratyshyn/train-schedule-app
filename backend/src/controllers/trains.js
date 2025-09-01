@@ -9,7 +9,6 @@ import {
 
 export const getTrainsController = async (req, res) => {
   const trains = await getTrains();
-
   res.json({
     message: 'Successfuly got trains',
     status: 200,
@@ -19,7 +18,7 @@ export const getTrainsController = async (req, res) => {
 
 export const postTrainController = async (req, res) => {
   const createdTrain = await postTrain(req.body);
-  res.json({
+  return res.json({
     message: 'Successfuly created train',
     status: 201,
     data: createdTrain,
@@ -27,7 +26,21 @@ export const postTrainController = async (req, res) => {
 };
 
 export const getByIdTrainController = async (req, res) => {
-  return await getByIdTrain();
+  const { trainId } = req.params;
+  const train = await getByIdTrain(Number(trainId));
+
+  if (!train) {
+    return res.status(404).json({
+      message: `Train with id ${req.query.trainId} not found`,
+      status: 404,
+    });
+  }
+
+  return res.json({
+    message: `Successfuly got train with id ${req.query.trainId}`,
+    status: 200,
+    data: train,
+  });
 };
 
 export const patchTrainController = async (req, res) => {
@@ -35,9 +48,19 @@ export const patchTrainController = async (req, res) => {
 };
 
 export const putTrainController = async (req, res) => {
-  return await putTrain();
+  const updatedTrain = await putTrain(req.body, req.params.trainId);
+  return res.json({
+    message: `Successfuly updated train with id ${req.params.trainId}`,
+    status: 200,
+    data: updatedTrain.rows[0],
+  });
 };
 
 export const deleteTrainController = async (req, res) => {
-  return await deleteTrain();
+  const { trainId } = req.params;
+  await deleteTrain(trainId);
+  return res.json({
+    message: `Successfuly deleted train with id ${req.query.trainId}`,
+    status: 200,
+  });
 };

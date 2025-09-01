@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 
 export default function AuthNavigation() {
   const router = useRouter();
-  const { isAuthenticated, setAuthenticationState } = useAuthStore();
+  const { isAuthenticated, cleanAuth } = useAuthStore();
   const handleClick = () => {
-    setAuthenticationState();
+    cleanAuth();
     router.push("/");
   };
   return isAuthenticated ? (

@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import {
-  //   deleteTrainController,
-  //   getByIdTrainController,
+  deleteTrainController,
+  getByIdTrainController,
   getTrainsController,
   //   patchTrainController,
   postTrainController,
-  //   putTrainController,
+  putTrainController,
 } from '../controllers/trains.js';
 //import { validateBody } from '../middleware/validateBody.js';
 //import { postTrainValidation } from '../validation/trainsOperationsValidation.js';
@@ -18,9 +18,9 @@ trainsRouter.post(
   //validateBody(postTrainValidation),
   postTrainController,
 );
-// trainsRouter.get('/trains/:id', getByIdTrainController);
+trainsRouter.get('/trains/:trainId', getByIdTrainController);
 // trainsRouter.patch('/trains/:id', patchTrainController);
-// trainsRouter.put('/trains/:id', putTrainController);
-// trainsRouter.delete('/trains/:id', deleteTrainController);
+trainsRouter.put('/trains/:trainId', putTrainController);
+trainsRouter.delete('/trains/:trainId', deleteTrainController);
 
 export default trainsRouter;

@@ -2,8 +2,8 @@
 import { useState } from "react";
 import css from "./SignUp.module.css";
 import { useRouter } from "next/navigation";
-import { register } from "../../lib/api/clientApi";
-import { useAuthStore } from "../../lib/store/authenticationStore";
+import { register } from "../../../../lib/api/clientApi";
+import { useAuthStore } from "../../../../lib/store/authenticationStore";
 
 type RegisterData = {
   username: string;
@@ -13,7 +13,7 @@ type RegisterData = {
 
 export default function Page() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const { setAuthenticationState } = useAuthStore();
+  const { setIsAuthenticated, setUser } = useAuthStore();
   const router = useRouter();
 
   const handleLogin = async (formData: FormData) => {
@@ -28,19 +28,22 @@ export default function Page() {
       if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) {
         validationErrors.email = "Please enter a valid email address.";
       }
-      if (!data.password_hash || data.password_hash.length < 6) {
+      if (!data.password_hash) {
         validationErrors.password =
-          "Password must be at least 6 characters long.";
+          "Required field. Please enter your password.";
       }
 
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
         return;
       }
-
-      await register(data);
-      setAuthenticationState();
-      setAuthenticationState();
+      console.log(data);
+      const user = await register(data);
+      setUser({
+        username: user.data.username,
+        email: user.data.email,
+      });
+      setIsAuthenticated(true);
       router.push("/profile");
     } catch (error) {
       console.error("Registration failed:", error);
@@ -87,7 +90,7 @@ export default function Page() {
           <input
             id="password"
             type="password"
-            name="password"
+            name="password_hash"
             className={css.input}
             required
           />
