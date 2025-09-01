@@ -4,8 +4,11 @@ import { getEnvVar } from '../utils/getEnvVar.js';
 const { Pool } = pkg;
 
 export const pool = new Pool({
-  connectionString: getEnvVar('DATABASE_URL'),
-  ssl: false,
+  host: getEnvVar('DB_HOST'),
+  port: getEnvVar('DB_PORT'),
+  user: getEnvVar('DB_USER'),
+  password: getEnvVar('DB_PASSWORD'),
+  database: getEnvVar('DB_NAME'),
 });
 
 export const postgresConnection = async () => {
