@@ -2,7 +2,10 @@
 const nextConfig = {
   async rewrites() {
     return [
-      { source: '/api/:path*', destination: 'https://train-schedule-app-yxl5.onrender.com/:path*' },
+      {
+        source: '/api/:path*',              
+        destination: 'http://localhost:3000/:path*',  
+      },
     ];
   },
   async headers() {

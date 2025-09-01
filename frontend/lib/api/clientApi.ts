@@ -1,6 +1,7 @@
 import { Train } from "../../types/train";
 import { nextServer } from "./api";
 import { User } from "../../types/user";
+import axios from "axios";
 
 export type LoginData = {
     email: string;
@@ -10,7 +11,7 @@ export type LoginData = {
 type RegisterData = {
     username: string;
     email: string;
-    password_hash: string;
+    password: string;
 }
 
 type GetTrainsResponse = {
@@ -26,13 +27,17 @@ type GetByIdTrainResponse = {
 }
 
 export const login = async (data: LoginData) => {
-    const res = await nextServer.post("/auth/login", data);
-    return res.data;
+    try {
+        const res = await nextServer.post('/auth/login', data, { withCredentials: true });
+        return res.data;
+    } catch (err: any) {console.error("Login error:", err.response?.data || err.message);
+  throw err; }
 }
 
 export const register = async (data: RegisterData) => {
-    const res = await nextServer.post("/auth/register", data);
-    return res.data;
+  const res = await nextServer.post('/auth/register', data);
+  return res.data;
+
 }
 
 export const getTrains = async () => {

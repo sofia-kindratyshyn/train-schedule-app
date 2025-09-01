@@ -1,30 +1,21 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-
-const privateRoutes = ['/profile', '/trains'];
-const publicRoutes = ['/sign-in', '/sign-up'];
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const { pathname } = request.nextUrl
+  const accessToken = request.cookies.get('accessToken')?.value
 
- const accessToken = request.cookies.get('accessToken')?.value;
- const refreshToken = request.cookies.get('refreshToken')?.value;
+  if ((pathname.startsWith('/trains') || pathname.startsWith('/profile')) && !accessToken) {
+    return NextResponse.redirect(new URL('/sign-in', request.url))
+  }
 
-  const isPrivateRoute = privateRoutes.some(route => pathname.startsWith(route));
-  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
+  if ((pathname.startsWith('/sign-in') || pathname.startsWith('/sign-up')) && accessToken) {
+    return NextResponse.redirect(new URL('/', request.url))
+  }
 
- //if (isPrivateRoute && !accessToken) {
-  // return NextResponse.redirect(new URL('/sign-in', request.url));
- //}
-
- if (isPublicRoute && accessToken) {
-   return NextResponse.redirect(new URL('/', request.url));
- }
-
- return NextResponse.next();
+  return NextResponse.next()
 }
 
 export const config = {
- matcher: ['/profile/:path*', '/trains/:path*', '/sign-in', '/sign-up'],
-};
-
+  matcher: ['/trains/:path*', '/profile/:path*', '/sign-in', '/sign-up'],
+}

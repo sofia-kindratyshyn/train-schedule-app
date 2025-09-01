@@ -8,7 +8,7 @@ import { useAuthStore } from "../../../../lib/store/authenticationStore";
 type RegisterData = {
   username: string;
   email: string;
-  password_hash: string;
+  password: string;
 };
 
 export default function Page() {
@@ -18,8 +18,8 @@ export default function Page() {
 
   const handleLogin = async (formData: FormData) => {
     try {
-      const data = Object.fromEntries(formData.entries()) as RegisterData;
-
+      const data = Object.fromEntries(formData) as RegisterData;
+      console.log(data);
       const validationErrors: { [key: string]: string } = {};
       if (!data.username || data.username.trim().length < 3) {
         validationErrors.username =
@@ -28,17 +28,16 @@ export default function Page() {
       if (!data.email || !/\S+@\S+\.\S+/.test(data.email)) {
         validationErrors.email = "Please enter a valid email address.";
       }
-      if (!data.password_hash) {
-        validationErrors.password =
-          "Required field. Please enter your password.";
+      if (!data.password) {
+        validationErrors.password = "Please enter your password.";
       }
 
       if (Object.keys(validationErrors).length > 0) {
         setErrors(validationErrors);
         return;
       }
-      console.log(data);
       const user = await register(data);
+      console.log(user);
       setUser({
         username: user.data.username,
         email: user.data.email,
@@ -46,7 +45,7 @@ export default function Page() {
       setIsAuthenticated(true);
       router.push("/profile");
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.log("Registration failed:", error);
     }
   };
 
@@ -90,7 +89,7 @@ export default function Page() {
           <input
             id="password"
             type="password"
-            name="password_hash"
+            name="password"
             className={css.input}
             required
           />
