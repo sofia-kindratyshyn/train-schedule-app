@@ -27,7 +27,7 @@ type GetByIdTrainResponse = {
 }
 
 export const login = async (data: LoginData) => {
-    const res = axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, data, { withCredentials: true })
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, data, { withCredentials: true })
     return res.data;
     
 }
