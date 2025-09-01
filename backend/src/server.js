@@ -9,7 +9,8 @@ import { notFoundErr } from './middleware/notFoundError.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { corsOptions } from './middleware/allowCors.js';
 import cookieParser from 'cookie-parser';
-//import { authenticate } from './middleware/authenticate.js';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const PORT = Number(getEnvVar('PORT'));
 
@@ -19,7 +20,6 @@ export const setupServer = () => {
   app.use(cookieParser());
 
   app.use(express.json());
-  //app.use(authenticate());
   app.use(cors(corsOptions));
 
   app.use(trainsRouter);
