@@ -1,7 +1,6 @@
 import { Train } from "../../types/train";
-import { nextServer } from "./api";
+import { nextServer, postRequestForDeploy } from "./api";
 import { User } from "../../types/user";
-import axios from "axios";
 
 export type LoginData = {
     email: string;
@@ -26,14 +25,15 @@ type GetByIdTrainResponse = {
     status: string;
 }
 
+
 export const login = async (data: LoginData) => {
-    const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, data, { withCredentials: true })
+    const res = await postRequestForDeploy('/auth/login', data);
     return res.data;
     
 }
 
 export const register = async (data: RegisterData) => {
-    const res = await nextServer.post('/auth/register', data);
+    const res = await postRequestForDeploy('/auth/register', data);
     return res.data;
 }
 
@@ -53,7 +53,7 @@ export const deleteTrain = async (trainId: number) => {
 }
 
 export const createTrain = async (payload: Train) => {
-    const res = await nextServer.post<{ message: string; status: string, data: Train }>("/trains", payload);
+    const res = await postRequestForDeploy('/trains', payload);
     return res.data;
 }
 
@@ -68,6 +68,6 @@ export const updateUser = async (username: string, email: string) => {
 }
 
 export const logout = async () => { 
-    const res = await nextServer.post<{ message: string; status: string }>('/auth/logout');
+    const res = await postRequestForDeploy('/auth/logout');
     return res.data;
 }
