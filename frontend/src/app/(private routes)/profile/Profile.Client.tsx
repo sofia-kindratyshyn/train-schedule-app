@@ -2,16 +2,9 @@
 import Link from "next/link";
 import styles from "./Profile.module.css";
 import { useAuthStore } from "../../../../lib/store/authenticationStore";
-//import { userData } from "@/app/lib/api/serverApi";
-
-// type ProfileClientProps = {
-//   curUser: userData;
-// };
-// { curUser }: ProfileClientProps
 
 export default function ProfileClient() {
   const { user } = useAuthStore();
-  // setUser(curUser);
   return (
     <div className={styles.container}>
       <h1 className={styles.heading}>Profile Page</h1>
