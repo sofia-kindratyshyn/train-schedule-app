@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { login } from "../../../../lib/api/clientApi";
 import css from "./SignIn.client.module.css";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "../../../../lib/store/authenticationStore";
 
 type LoginData = {
@@ -12,8 +12,10 @@ type LoginData = {
 
 export default function Login() {
   const { setIsAuthenticated, setUser } = useAuthStore();
+  const searchParams = useSearchParams();
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+  const redirectTo = searchParams.get("redirect") || "/trains";
   const handleLogin = async (formData: FormData) => {
     try {
       setError(null);
@@ -21,7 +23,7 @@ export default function Login() {
       const user = await login(data);
       setUser({ username: user.data.username, email: user.data.email });
       setIsAuthenticated(true);
-      router.push("/profile");
+      router.push(redirectTo as string);
     } catch (error) {
       setError("Invalid email or password");
       console.log(error);
